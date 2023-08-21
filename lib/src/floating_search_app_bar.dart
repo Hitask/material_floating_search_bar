@@ -681,14 +681,17 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
 
     return NotificationListener<ScrollNotification>(
       onNotification: (_) => true,
-      child: SingleChildScrollView(
-        padding: insets,
-        scrollDirection: Axis.horizontal,
-        child: Opacity(
-          opacity: opacity,
-          child: input,
-        ),
-      ),
+      child: showTitle && !showTextInput
+          ? Container(
+              padding: insets, child: Opacity(opacity: opacity, child: input))
+          : SingleChildScrollView(
+              padding: insets,
+              scrollDirection: Axis.horizontal,
+              child: Opacity(
+                opacity: opacity,
+                child: input,
+              ),
+            ),
     );
   }
 
