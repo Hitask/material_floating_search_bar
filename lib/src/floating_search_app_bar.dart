@@ -52,6 +52,7 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
     this.textInputAction = TextInputAction.search,
     this.textInputType = TextInputType.text,
     this.autocorrect = true,
+    this.openOnTap = true,
     this.contextMenuBuilder,
     this.onKeyEvent,
   })  : assert(progress == null || (progress is num || progress is bool)),
@@ -182,6 +183,9 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
   /// {@macro floating_search_bar.autocorrect}
   final bool autocorrect;
 
+  /// {@macro floating_search_bar.openOnTap}
+  final bool openOnTap;
+
   /// {@macro floating_search_bar. contextMenuBuilder}
   final EditableTextContextMenuBuilder? contextMenuBuilder;
 
@@ -245,15 +249,21 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   bool _wasUnfocusedOnScroll = false;
 
   bool _isAtTop = true;
+
   bool get isAtTop => _isAtTop;
 
+  bool get openOnTap => widget.openOnTap;
+
   bool get isAppBar => widget.body != null;
+
   bool get isAlwaysOpened => widget.alwaysOpened;
+
   double get _statusBarHeight => MediaQuery.of(context).viewPadding.top;
 
   Duration get transitionDuration => widget.transitionDuration;
 
   FloatingSearchAppBarStyle get style => value;
+
   Color get backgroundColor => Color.lerp(
         style.backgroundColor,
         style.colorOnScroll,
@@ -261,6 +271,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
       )!;
 
   bool get hasActions => actions.isNotEmpty;
+
   List<Widget> get actions {
     final List<Widget> actions =
         widget.actions ?? <Widget>[FloatingSearchBarAction.searchToClear()];
@@ -275,6 +286,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   bool get hasleadingActions => leadingActions.isNotEmpty;
+
   List<Widget> get leadingActions {
     final List<Widget> actions = widget.leadingActions ?? const <Widget>[];
     final bool showHamburger = widget.automaticallyImplyDrawerHamburger &&
@@ -294,7 +306,9 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   bool _isOpen = false;
+
   bool get isOpen => _isOpen;
+
   set isOpen(bool value) {
     if (value) {
       () async {
@@ -321,9 +335,11 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   bool get hasFocus => _input.hasFocus;
+
   set hasFocus(bool value) => value ? focus() : unfocus();
 
   String get query => _input.text;
+
   set query(String value) => _input.text = value;
 
   @override
@@ -361,6 +377,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   void open() => isOpen = true;
+
   void close() => isOpen = false;
 
   void focus() {
@@ -378,6 +395,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   void _assignController() => widget.controller?._appBarState = this;
 
   late EdgeInsets insets;
+
   void _setInsets() {
     bool hasActions(List<Widget> actions) {
       final List<Widget> active = List<Widget>.from(actions)
@@ -489,7 +507,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         if (isOpen) {
           hasFocus = !hasFocus;
           _input.moveCursorToEnd();
-        } else if (!isAppBar) {
+        } else if (!isAppBar && openOnTap) {
           isOpen = true;
         }
       },
@@ -729,6 +747,7 @@ class _FloatingSearchProgressBar extends StatefulWidget {
     required this.progress,
     required this.color,
   });
+
   final dynamic progress;
   final Color color;
 
@@ -742,6 +761,7 @@ class _FloatingSearchProgressBarState extends State<_FloatingSearchProgressBar>
   late final AnimationController _controller;
 
   dynamic get progress => widget.progress;
+
   bool get showProgressBar => _controller.value > 0.0;
 
   @override

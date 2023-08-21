@@ -68,6 +68,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.textInputAction = TextInputAction.search,
     this.textInputType = TextInputType.text,
     this.autocorrect = true,
+    this.openOnTap = true,
     this.contextMenuBuilder,
     Duration? showAfter,
     this.isScrollControlled = false,
@@ -87,6 +88,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// to scroll events (i.e. hide from view when a [Scrollable]
   /// is being scrolled down and show it again when scrolled up).
   final Widget? body;
+
   // * --- Style properties --- *
 
   /// The color used for elements such as the progress
@@ -354,6 +356,12 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// {@endtemplate}
   final TextInputType textInputType;
 
+  /// {@template floating_search_bar.openOnTap}
+  /// Enable or disable opening of the [TextField] of
+  /// this `FloatingSearchBar` by tap on the closed widget.
+  /// {@endtemplate}
+  final bool openOnTap;
+
   /// {@template floating_search_bar.autocorrect}
   /// Enable or disable autocorrection of the [TextField] of
   /// this `FloatingSearchBar`.
@@ -413,6 +421,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
 class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
     FloatingSearchBarStyle, FloatingSearchBar> {
   final GlobalKey<FloatingSearchAppBarState> barKey = GlobalKey();
+
   FloatingSearchAppBarState? get barState => barKey.currentState;
 
   late final AnimationController _controller = AnimationController(
@@ -450,13 +459,17 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
   FloatingSearchBarStyle get style => value;
 
   Widget? get title => widget.title;
+
   String get hint => widget.hint?.toString() ?? '';
 
   Curve get curve => widget.transitionCurve;
+
   Duration get duration => widget.transitionDuration;
+
   Duration get queryCallbackDelay => widget.debounceDelay;
 
   bool get isOpen => barState?.isOpen ?? false;
+
   set isOpen(bool value) {
     if (value != isOpen) {
       barState?.isOpen = value;
@@ -465,6 +478,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   bool get isVisible => _translateController.isDismissed;
+
   set isVisible(bool value) {
     if (value == isVisible) {
       return;
@@ -479,9 +493,11 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
   void rebuild() => rebuilder.value++;
 
   double _offset = 0.0;
+
   double get offset => _offset;
 
   double get v => animation.value;
+
   bool get isAnimating => _controller.isAnimating;
 
   @override
@@ -532,9 +548,11 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
   void _assignController() => widget.controller?._searchBarState = this;
 
   void show() => isVisible = true;
+
   void hide() => isVisible = false;
 
   void open() => isOpen = true;
+
   void close() => isOpen = false;
 
   Future<bool> _onPop() async {
@@ -727,6 +745,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
       body: null,
       key: barKey,
       height: 1000,
+      openOnTap: widget.openOnTap,
       controller: widget.controller,
       color: transition.lerpBackgroundColor(),
       onFocusChanged: (bool isFocused) {
