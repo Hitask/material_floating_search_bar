@@ -610,9 +610,11 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
           return false;
         }
 
-        _translateController.value +=
-            delta / (style.height + style.margins.top);
-        _lastPixel = pixel;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _translateController.value +=
+              delta / (style.height + style.margins.top);
+          _lastPixel = pixel;
+        });
       }
     }
 
