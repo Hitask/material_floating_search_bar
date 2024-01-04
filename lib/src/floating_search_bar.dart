@@ -6,7 +6,6 @@ import 'package:flutter/material.dart'
 import 'package:flutter/services.dart';
 
 import '../material_floating_search_bar_2.dart';
-
 import 'floating_search_bar_dismissable.dart';
 import 'search_bar_style.dart';
 import 'text_controller.dart';
@@ -31,6 +30,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.body,
     this.accentColor,
     this.backgroundColor,
+    this.backgroundWidget,
     this.shadowColor = Colors.black87,
     this.iconColor,
     this.backdropColor,
@@ -101,6 +101,11 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   ///
   /// If not specified, defaults to `theme.cardColor`.
   final Color? backgroundColor;
+
+  /// The custom background widget of the card.
+  ///
+  /// If not specified, 'backgroundColor' will be used.
+  final Widget? backgroundWidget;
 
   /// The color of the shadow drawn when `elevation > 0`.
   ///
@@ -692,6 +697,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
             curve: const Interval(0.95, 1.0),
           ),
           builder: (BuildContext context, Widget? child) => Material(
+            color: transition.lerpBackgroundColor(),
             elevation: transition.lerpElevation() *
                 (1.0 - interval(0.95, 1.0, _translateAnimation.value)),
             shadowColor: style.shadowColor,
@@ -725,19 +731,34 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
       child: container,
     );
 
-    return AnimatedAlign(
-      duration: isAnimating ? duration : Duration.zero,
-      curve: widget.transitionCurve,
-      alignment: Alignment(
-          isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
-      child: transition.isBodyInsideSearchBar
-          ? bar
-          : Column(
-              children: <Widget>[
-                bar,
-                Expanded(child: _buildBody()),
-              ],
+    return Stack(
+      children: <Widget>[
+        if (widget.backgroundWidget != null)
+          Padding(
+            padding: transition.lerpMargin(),
+            child: SizedBox(
+              height: transition.lerpHeight(),
+              width: transition.lerpWidth(),
+              child: widget.backgroundWidget,
             ),
+          )
+        else
+          const SizedBox.shrink(),
+        AnimatedAlign(
+          duration: isAnimating ? duration : Duration.zero,
+          curve: widget.transitionCurve,
+          alignment: Alignment(
+              isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
+          child: transition.isBodyInsideSearchBar
+              ? bar
+              : Column(
+                  children: <Widget>[
+                    bar,
+                    Expanded(child: _buildBody()),
+                  ],
+                ),
+        ),
+      ],
     );
   }
 
@@ -802,6 +823,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
           Material(
             elevation: transition.lerpInnerElevation(),
             shadowColor: style.shadowColor,
+            color: transition.lerpBackgroundColor(), //Colors.transparent,
             child: Container(
               height: style.height,
               color: transition.lerpBackgroundColor(),

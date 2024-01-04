@@ -109,6 +109,8 @@ class _HomeState extends State<Home> {
           FloatingSearchBar(
         automaticallyImplyBackButton: false,
         controller: controller,
+        backgroundColor: Colors.transparent,
+        backgroundWidget: Container(color: Colors.blueAccent),
         hint: 'חיפוש...',
         iconColor: Colors.grey,
         transitionDuration: const Duration(milliseconds: 800),

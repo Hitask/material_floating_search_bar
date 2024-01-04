@@ -566,8 +566,8 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
             alignment: AlignmentDirectional.centerStart,
             children: <Widget>[
               _buildInputField(),
-              buildGradient(isLeft: true),
-              buildGradient(isLeft: false),
+              //buildGradient(isLeft: true),
+              //buildGradient(isLeft: false),
             ],
           ),
         ),
