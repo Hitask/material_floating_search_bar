@@ -12,9 +12,13 @@ class CircularButton extends StatelessWidget {
     this.size = 24.0,
     this.padding = const EdgeInsets.all(8),
     this.tooltip,
+    this.shape,
   });
+
   // ignore: public_member_api_docs
   final Widget icon;
+
+  final ShapeBorder? shape;
 
   // ignore: public_member_api_docs
   final VoidCallback onPressed;
@@ -37,6 +41,7 @@ class CircularButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget button = Material(
       type: MaterialType.transparency,
+      shape: shape,
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onPressed,

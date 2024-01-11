@@ -68,7 +68,9 @@ class _HomeState extends State<Home> {
   final FloatingSearchBarController controller = FloatingSearchBarController();
 
   int _index = 0;
+
   int get index => _index;
+
   set index(int value) {
     _index = min(value, 2);
     _index == 2 ? controller.hide() : controller.show();
@@ -92,12 +94,24 @@ class _HomeState extends State<Home> {
     final List<FloatingSearchBarAction> actions = <FloatingSearchBarAction>[
       FloatingSearchBarAction(
         child: CircularButton(
+          shape: CircleBorder(
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.surfaceVariant,
+              width: 2,
+            ),
+          ),
           icon: const Icon(Icons.place),
           onPressed: () {},
         ),
       ),
       FloatingSearchBarAction.searchToClear(
         showIfClosed: false,
+        shape: CircleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.surfaceVariant,
+            width: 2,
+          ),
+        ),
       ),
     ];
 

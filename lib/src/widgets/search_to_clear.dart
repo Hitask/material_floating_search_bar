@@ -19,6 +19,7 @@ class SearchToClear extends StatelessWidget {
     this.size = 24.0,
     this.searchButtonSemanticLabel = 'Search',
     this.clearButtonSemanticLabel = 'Clear',
+    this.shape,
   });
 
   /// If `true`, the search icon will be shown.
@@ -29,6 +30,7 @@ class SearchToClear extends StatelessWidget {
   final double size;
   final String searchButtonSemanticLabel;
   final String clearButtonSemanticLabel;
+  final ShapeBorder? shape;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class SearchToClear extends StatelessWidget {
       builder: (BuildContext context, double value) {
         return CircularButton(
           onPressed: onTap,
+          shape: shape,
           tooltip: value == 0.0
               ? searchButtonSemanticLabel
               : clearButtonSemanticLabel,
@@ -59,6 +62,7 @@ class _SearchToClearPainter extends CustomPainter {
     this.color,
     this.progress,
   );
+
   final Color color;
   final double progress;
 

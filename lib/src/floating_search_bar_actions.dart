@@ -81,6 +81,7 @@ class FloatingSearchBarAction extends StatelessWidget {
     Duration duration = const Duration(milliseconds: 900),
     String searchButtonSemanticLabel = 'Search',
     String clearButtonSemanticLabel = 'Clear',
+    ShapeBorder? shape,
   }) {
     return FloatingSearchBarAction(
       showIfOpened: true,
@@ -96,6 +97,7 @@ class FloatingSearchBarAction extends StatelessWidget {
             return SearchToClear(
               isEmpty: isEmpty,
               size: size,
+              shape: shape,
               color: color ?? bar.style.iconColor,
               duration: duration * 0.5,
               onTap: () {
@@ -119,6 +121,7 @@ class FloatingSearchBarAction extends StatelessWidget {
     double size = 24,
     Color? color,
     bool showIfClosed = false,
+    ShapeBorder? shape,
   }) {
     return FloatingSearchBarAction(
       showIfClosed: showIfClosed,
@@ -130,6 +133,7 @@ class FloatingSearchBarAction extends StatelessWidget {
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           size: size,
           icon: Icon(Icons.arrow_back, color: color, size: size),
+          shape: shape,
           onPressed: () {
             final FloatingSearchAppBarState bar =
                 FloatingSearchAppBar.of(context)!;
@@ -154,6 +158,7 @@ class FloatingSearchBarAction extends StatelessWidget {
     double size = 24.0,
     bool showIfOpened = false,
     bool showIfClosed = true,
+    ShapeBorder? shape,
   }) {
     return FloatingSearchBarAction(
       showIfClosed: showIfClosed,
@@ -162,6 +167,7 @@ class FloatingSearchBarAction extends StatelessWidget {
         size: size,
         icon: icon is IconData ? Icon(icon) : icon as Widget,
         onPressed: onTap,
+        shape: shape,
       ),
     );
   }
@@ -214,6 +220,7 @@ class FloatingSearchActionBar extends StatelessWidget {
     required this.actions,
     this.iconTheme,
   });
+
   final Animation<double> animation;
   final List<Widget> actions;
   final IconThemeData? iconTheme;
